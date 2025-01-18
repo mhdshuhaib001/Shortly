@@ -67,7 +67,6 @@ PORT=5000
 MONGODB_URI=your_mongodb_uri
 REDIS_URL=redis://redis:6379
 JWT_SECRET=your_jwt_secret
-GOOGLE_CLIENT_ID=your_google_client_id
 FRONTEND_URL=http://localhost:3000
 BASE_URL=http://localhost:5000
 ```
