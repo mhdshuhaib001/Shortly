@@ -1,5 +1,5 @@
 import URL from "../models/URL.js";
-import shortid from "shortid";
+import { nanoid } from "nanoid";
 import redis from "../config/redis.js";
 
 const urlController = {
@@ -27,7 +27,7 @@ const urlController = {
           return res.status(400).json({ error: "Custom alias already in use" });
         }
       } else {
-        shortUrl = shortid.generate();
+        shortUrl = nanoid();
       }
 
       console.log(shortUrl, "thisi is the shortUrl");

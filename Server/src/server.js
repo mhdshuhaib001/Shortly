@@ -5,7 +5,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.js";
 import urlRoute from "./routes/urlRoute.js";
 import connectDB from "./config/database.js";
-import analytics from './routes/analytics.js'
+import analytics from "./routes/analytics.js";
 
 const app = express();
 
@@ -15,8 +15,8 @@ app.use(express.json());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    credentials: true,
+    methods: ["GET", "POST", "OPTIONS"],
+    credentials: true
   })
 );
 
@@ -28,7 +28,6 @@ app.use((err, req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/url", urlRoute);
 app.use("/api/analytics", analytics);
-
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

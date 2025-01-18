@@ -9,10 +9,9 @@ const client = redis.createClient({
   socket: {
     reconnectStrategy: (retries) => {
       console.log(`Reconnection attempt ${retries}`);
-      if (retries > 10) {
+      if (retries > 7) {
         console.log('Max reconnection attempts reached');
-        return undefined;
-      }
+        return false;       }
       return Math.min(retries * 100, 3000);
     }
   }
