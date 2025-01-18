@@ -2,10 +2,8 @@ import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import User from "../models/User.js";
 import axios from "axios";
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const authController = {
-
   googleAuth: async (req, res) => {
     try {
       const { token } = req.body;
@@ -14,7 +12,7 @@ const authController = {
       }
 
       let userData = null;
-  // Google auth implementation
+      // Google auth implementation
       try {
         const userInfoResponse = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",

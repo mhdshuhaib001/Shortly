@@ -1,15 +1,14 @@
 import URL from "../models/URL.js";
-import shortid, { isValid } from "shortid";
+import shortid from "shortid";
 import redis from "../config/redis.js";
 
 const urlController = {
-
-  isValidUrl:(url)=>{
+  isValidUrl: (url) => {
     try {
-      new URL(url)
-      return true 
+      const regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+      return regex.test(url);
     } catch (error) {
-      return false
+      return false;
     }
   },
   createShortURL: async (req, res) => {
@@ -17,10 +16,10 @@ const urlController = {
       const { longUrl, customAlias, topic } = req.body;
       const userId = req.user.userId;
 
-
-      if (!urlController.isValidUrl.test(longUrl)) {
+      if (!urlController.isValidUrl(longUrl)) {
         return res.status(400).json({ error: "Invalid Url Format" });
       }
+
       let shortUrl = customAlias;
       if (customAlias) {
         const existingUrl = await URL.findOne({ shortUrl: customAlias });
@@ -41,7 +40,7 @@ const urlController = {
 
       console.log(url, "this is the userl");
       // cashing new url for the 24 hr
-      await redis.set(`url:${shortUrl}`, longUrl, "EX", 86400); 
+      await redis.set(`url:${shortUrl}`, longUrl, "EX", 86400);
 
       res.status(201).json({
         urlId: url._id,

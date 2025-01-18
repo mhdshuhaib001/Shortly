@@ -1,20 +1,26 @@
-import rateLimit from 'express-rate-limit';
-import RedisStore from 'rate-limit-redis';
+import { RateLimiterRedis } from 'rate-limiter-flexible';
 import redis from '../config/redis.js';
 
-const createRateLimiter = (windowMs, max) => {
-  return rateLimit({
-    store: new RedisStore({
-      sendCommand: (...args) => redis.sendCommand(args),
-      prefix: 'rate-limit',
-    }),
-    windowMs,
-    max,
-    message: {
-      error: 'Too many requests, Please try again later',
-    },
+const createRateLimiter = (duration, points) => {
+  const rateLimiter = new RateLimiterRedis({
+    storeClient: redis,
+    keyPrefix: 'rate-limit',
+    points, 
+    duration: duration / 1000, 
   });
+
+  return async (req, res, next) => {
+    try {
+      const key = req.ip;
+      await rateLimiter.consume(key);
+      next();
+    } catch (error) {
+      res.status(429).json({
+        error: 'Too many requests, Please try again later'
+      });
+    }
+  };
 };
 
-export const createURLLimiter = createRateLimiter(10 * 1000, 5); 
-export const createAnalyticsLimiter = createRateLimiter(5 * 1000, 3); 
+export const createURLLimiter = createRateLimiter(10 * 1000, 5);  
+export const createAnalyticsLimiter = createRateLimiter(5 * 1000, 3);  
