@@ -41,10 +41,10 @@ const urlController = {
       console.log(url, "this is the userl");
       // cashing new url for the 24 hr
       await redis.set(`url:${shortUrl}`, longUrl, "EX", 86400);
-
+      const shortedUrl = `${process.env.BASE_URL}/api/url/${shortUrl}`;
       res.status(201).json({
         urlId: url._id,
-        shortUrl: `${process.env.BASE_URL}/api/url/${shortUrl}`,
+        shortUrl: shortedUrl,
         longUrl,
         topic,
         createdAt: url.createdAt
