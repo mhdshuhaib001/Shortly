@@ -5,7 +5,7 @@ const analyticsController = {
   getURLAnalytics: async (req, res) => {
     try {
       const { urlId } = req.params;
-
+console.log(urlId,'----------------------------------')
       const url = await URL.findById(urlId);
 
       if (!url || url.userId.toString() != req.user.userId) {

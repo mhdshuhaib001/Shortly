@@ -38,7 +38,6 @@ const urlController = {
         topic: topic || "general"
       });
 
-      console.log(url, "this is the userl");
       // cashing new url for the 24 hr
       await redis.set(`url:${shortUrl}`, longUrl, "EX", 86400);
       const shortedUrl = `${process.env.BASE_URL}/api/url/${shortUrl}`;
