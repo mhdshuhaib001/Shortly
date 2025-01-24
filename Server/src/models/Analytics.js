@@ -10,10 +10,6 @@ const analyticsSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  timestamp: {
-    type: Date,
-    default: Date.now
-  },
   userAgent: String,
   ipAddress: String,
   country: String,

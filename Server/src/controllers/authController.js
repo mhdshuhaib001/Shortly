@@ -41,7 +41,6 @@ const authController = {
       }
 
       let user = await User.findOne({ googleId: userData.googleId });
-console.log(user,'==============================================================================================')
       if (!user) {
         user = await User.create(userData);
       }

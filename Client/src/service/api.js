@@ -55,7 +55,6 @@ const apiService = {
           customAlias,
           topic
         });
-        console.log(response,'=============== url created')
         return response.data;
       } catch (error) {
         throw error.response?.data?.error || "Failed to create short URL";
@@ -70,10 +69,16 @@ const apiService = {
       }
     },
 
-    async getList() {
+    async getList({ page = 1, limit = 10 }) {
       try {
-        const response = await api.get("/api/url/list");
-        return response.data;
+        const response = await api.get(
+          `/api/url/list?page=${page}$limit=${limit}`
+        );
+        console.log("Response:", response);
+        return {
+          data: response.data.data,
+          pagination: response.data.pagination
+        };
       } catch (error) {
         throw error.response?.data?.error || "Failed to fetch URLs";
       }
@@ -86,12 +91,29 @@ const apiService = {
         throw error.response?.data?.error || "Failed to get URL stats";
       }
     },
-    async getList() {
+    async getList({ page = 1, limit = 10 }) {
       try {
-        const response = await api.get("/api/url/list");
-        return response.data;
+        const response = await api.get(
+          `/api/url/list?page=${page}&limit=${limit}`
+        );
+        return {
+          data: response.data.data,
+          pagination: response.data.pagination
+        };
       } catch (error) {
         throw error.response?.data?.error || "Failed to fetch URLs";
+      }
+    }
+  },
+  analytics: {
+    async getOverall() {
+      try {
+        const response = await api.get("/api/analytics/overall");
+        return response;
+      } catch (error) {
+        throw (
+          error.response?.data?.error || "Failed to fetch overall analytics"
+        );
       }
     }
   }

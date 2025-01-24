@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   LineChart,
   Line,
@@ -11,26 +11,25 @@ import {
   PieChart,
   Pie,
   Cell
-} from 'recharts';
+} from "recharts";
+import apiService from "../../service/api";
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const OverallStats = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/analytics/overall`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const response = await apiService.analytics.getOverall();
+
         setStats(response.data);
       } catch (error) {
-        setError('Failed to fetch analytics');
+        console.error("Analatics Error", error);
+        setError("Failed to fetch analytics",error);
       } finally {
         setLoading(false);
       }
@@ -39,8 +38,13 @@ const OverallStats = () => {
     fetchStats();
   }, []);
 
-  if (loading) return <div className="text-center mt-8">Loading...</div>;
-  if (error) return <div className="text-center mt-8 text-red-600">{error}</div>;
+  if (loading) {
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+    </div>;
+  }
+  if (error)
+    return <div className="text-center mt-8 text-red-600">{error}</div>;
   if (!stats) return <div className="text-center mt-8">No data available</div>;
 
   return (
@@ -99,7 +103,10 @@ const OverallStats = () => {
                   label
                 >
                   {stats.deviceType.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />

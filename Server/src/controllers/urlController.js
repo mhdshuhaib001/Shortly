@@ -75,6 +75,44 @@ const urlController = {
       console.error("Redirect Error:", error);
       res.status(500).json({ error: "Error redirecting to URL" });
     }
+  },
+  getUrlList: async (req, res) => {
+    try {
+      const userId = req.user.userId;
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
+
+      const totalUrls = await URL.countDocuments({ userId });
+      const totalPages = Math.ceil(totalUrls / limit);
+      const urls = await URL.find({ userId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .select("shortUrl longUrl topic clicks createdAt");
+
+      const formattedUrls = urls.map((url) => ({
+        _id: url._id,
+        shortUrl: `${process.env.BASE_URL}/api/url/${url.shortUrl}`,
+        longUrl: url.longUrl,
+        topic: url.topic || "general",
+        clicks: url.clicks,
+        createdAt: url.createdAt
+      }));
+      res.json({
+        success: true,
+        data: formattedUrls,
+        pagination: {
+          currentPage: page,
+          totalPages,
+          totalItems: totalUrls,
+          limit
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching URL list:", error);
+      res.status(500).json({ error: "Failed to fetch URL list" });
+    }
   }
 };
 

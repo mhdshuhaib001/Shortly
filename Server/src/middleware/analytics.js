@@ -16,7 +16,6 @@ const trackAnalytics = async (req, res, next) => {
     if(!urlRecord){
       return res.status(404).json({error:'Short Url Is Not Found'})
     }
-
     const analytics = new Analytics({
       urlId: urlRecord._id,
       userAgent: req.headers["user-agent"],

@@ -4,14 +4,14 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "./store/store";
 import { AuthProvider } from "./contexts/AuthContext";
-import Login from "./components/Login";
+import Home from "./pages/Home";
 import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/DashBoard";
 import OverallStats from "./components/Analytics/OverallStats";
 import CreateURL from "./components/URL/CreateURL";
 import URLStats from "./components/Analytics/URLStats";
-
+import AuthProtect from "./components/AuthProtecter";
 function App() {
   return (
     <Provider store={store}>
@@ -19,13 +19,18 @@ function App() {
         <GoogleOAuthProvider
           clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}
         >
-          <AuthProvider>
-            <Router>
+          <Router>
+            <AuthProvider>
               <Navbar />
               <Routes>
-                <Route path="/login" element={<Login />} />
                 <Route
                   path="/"
+                  element={
+                      <Home />
+                  }
+                />
+                <Route
+                  path="/dashboard"
                   element={
                     <PrivateRoute>
                       <Dashboard />
@@ -35,10 +40,9 @@ function App() {
                 <Route path="/create" element={<CreateURL />} />
                 <Route path="/overall" element={<OverallStats />} />
                 <Route path="/stats/:urlId" element={<URLStats />} />
-
               </Routes>
-            </Router>
-          </AuthProvider>
+            </AuthProvider>
+          </Router>
         </GoogleOAuthProvider>
       </PersistGate>
     </Provider>

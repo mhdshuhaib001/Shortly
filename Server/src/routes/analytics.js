@@ -7,5 +7,7 @@ const router = express.Router();
 
 router.get('/url/:urlId',authMiddleware,createAnalyticsLimiter,analyticsController.getURLAnalytics)
 router.get('/topic/:topic',authMiddleware,createAnalyticsLimiter,analyticsController.getTopicAnalytics)
+router.get('/overall', authMiddleware, createAnalyticsLimiter, analyticsController.getOverallAnalytics);
+
 
 export default router

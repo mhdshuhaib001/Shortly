@@ -2,12 +2,13 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { useDispatch ,useSelector} from "react-redux";
 import { loginUser, logout as logoutAction ,selectUser} from "../store/slice/userSlice";
 import apiService from "../service/api";
+import { useNavigate } from "react-router-dom"; 
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const user = useSelector(selectUser)
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
 
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     dispatch(logoutAction());
     apiService.auth.logout();
+    navigate("/"); 
   };
 
   useEffect(() => {
@@ -44,10 +46,8 @@ export const AuthProvider = ({ children }) => {
               token: token
             })
           );
-
-          console.log(userData,'this is the userData')
         })
-        .catch(() => logout())
+        .catch(() => logout()) 
         .finally(() => setLoading(false));
     } else {
       setLoading(false);

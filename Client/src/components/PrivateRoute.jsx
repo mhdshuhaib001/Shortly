@@ -9,7 +9,9 @@ const PrivateRoute = ({ children }) => {
   const user = useSelector(selectUser)
   if (loading) return <div>Loading...</div>; 
 
-
+  if (!user) {
+    return <Navigate to="/" />;
+  }
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
