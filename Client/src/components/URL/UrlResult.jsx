@@ -50,7 +50,7 @@ const UrlResult = ({ shortUrl, longUrl, urlId }) => {
 
         <button
           onClick={viewStats}
-          className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+          className="w-full py-2 px-4 border border-transparent rounded-md text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
         >
           View Statistics
         </button>

@@ -97,8 +97,6 @@ const analyticsController = {
     try {
       const userId = req.user.userId;
       const urls = await URL.find({ userId });
-      console.log(urls, "=========================================");
-      // Simplified analytics aggregation
       const analytics = await Analytics.aggregate([
         { $match: { urlId: { $in: urls.map((url) => url._id) } } },
         {
