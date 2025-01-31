@@ -11,7 +11,6 @@ import Dashboard from "./components/DashBoard";
 import OverallStats from "./components/Analytics/OverallStats";
 import CreateURL from "./components/URL/CreateURL";
 import URLStats from "./components/Analytics/URLStats";
-import AuthProtect from "./components/AuthProtecter";
 function App() {
   return (
     <Provider store={store}>
@@ -23,12 +22,7 @@ function App() {
             <AuthProvider>
               <Navbar />
               <Routes>
-                <Route
-                  path="/"
-                  element={
-                      <Home />
-                  }
-                />
+                <Route path="/" element={<Home />} />
                 <Route
                   path="/dashboard"
                   element={
@@ -37,9 +31,30 @@ function App() {
                     </PrivateRoute>
                   }
                 />
-                <Route path="/create" element={<CreateURL />} />
-                <Route path="/overall" element={<OverallStats />} />
-                <Route path="/stats/:urlId" element={<URLStats />} />
+                <Route
+                  path="/create"
+                  element={
+                    <PrivateRoute>
+                      <CreateURL />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/overall"
+                  element={
+                    <PrivateRoute>
+                      <OverallStats />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/stats/:urlId"
+                  element={
+                    <PrivateRoute>
+                      <URLStats />
+                    </PrivateRoute>
+                  }
+                />
               </Routes>
             </AuthProvider>
           </Router>

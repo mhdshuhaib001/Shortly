@@ -1,17 +1,11 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../store/slice/userSlice';
 
 const PrivateRoute = ({ children }) => {
-  const {  loading } = useAuth();
-  const user = useSelector(selectUser)
-  if (loading) return <div>Loading...</div>; 
+  const { loading, isAuthenticated } = useAuth();
+  const location = useLocation();
 
-  if (!user) {
-    return <Navigate to="/" />;
-  }
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -20,7 +14,11 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  return user ? children : <Navigate to="/login" />;
+  if (!isAuthenticated) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+
+  return children;
 };
 
 export default PrivateRoute;
